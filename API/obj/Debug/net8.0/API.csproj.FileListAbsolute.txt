@@ -1,8 +1,0 @@
-/Users/iasonaschristoulakis/Documents/ASP_NET/DatingApp/API/obj/Debug/net8.0/API.csproj.AssemblyReference.cache
-/Users/iasonaschristoulakis/Documents/ASP_NET/DatingApp/API/obj/Debug/net8.0/API.GeneratedMSBuildEditorConfig.editorconfig
-/Users/iasonaschristoulakis/Documents/ASP_NET/DatingApp/API/obj/Debug/net8.0/API.AssemblyInfoInputs.cache
-/Users/iasonaschristoulakis/Documents/ASP_NET/DatingApp/API/obj/Debug/net8.0/API.AssemblyInfo.cs
-/Users/iasonaschristoulakis/Documents/ASP_NET/DatingApp/API/obj/Debug/net8.0/API.csproj.CoreCompileInputs.cache
-/Users/iasonaschristoulakis/Documents/ASP_NET/DatingApp/API/obj/Debug/net8.0/API.MvcApplicationPartsAssemblyInfo.cs
-/Users/iasonaschristoulakis/Documents/ASP_NET/DatingApp/API/obj/Debug/net8.0/API.MvcApplicationPartsAssemblyInfo.cache
-/Users/iasonaschristoulakis/Documents/ASP_NET/DatingApp/API/obj/Debug/net8.0/API.sourcelink.json
