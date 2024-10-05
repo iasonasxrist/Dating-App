@@ -24,7 +24,10 @@
                 "input": "public"
               }
             ],
-            "styles": ["src/styles.css"],
+            "styles": [
+              "src/styles.css",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css"
+            ],
             "scripts": [],
             "server": "src/main.server.ts",
             "prerender": true,
@@ -61,6 +64,14 @@
           "configurations": {
             "production": {
               "buildTarget": "angular-app:build:production"
+            },
+            "staging" : {
+              "fileReplacements": [
+                {
+                  "replace": "src/environment/environment.ts",
+                  "with": "src/environment/environment.staging.ts"
+                }
+              ]
             },
             "development": {
               "buildTarget": "angular-app:build:development"
