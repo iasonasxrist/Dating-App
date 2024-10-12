@@ -1,27 +1,32 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
-import {NgClass} from "@angular/common";
-import {Router} from "@angular/router";
-import {User} from "../_models/user";
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import {
+  FormGroup,
+  Validators,
+  FormBuilder,
+  ReactiveFormsModule,
+  FormsModule,
+} from '@angular/forms';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
-import {AuthService} from "../_services/auth.service";
-import {AlertService} from "../_services/alert.service";
+import { Router } from '@angular/router';
+
+import { AuthService } from '../_services/auth.service';
+import { User } from '../_models/user';
+import { AlertService } from '../_services/alert.service';
+import { NgClass } from '@angular/common';
+
 @Component({
   selector: 'app-register',
+
   standalone: true,
-  imports: [
-    FormsModule,
-    NgClass,
-    ReactiveFormsModule
-  ],
+  imports: [FormsModule, NgClass, ReactiveFormsModule],
   templateUrl: './register.component.html',
-  styleUrl: './register.component.css'
+  styleUrl: './register.component.css',
 })
-export class RegisterComponent implements OnInit{
+export class RegisterComponent implements OnInit {
   @Output() cancelRequest = new EventEmitter();
-  user:User;
-  registerForm: FormGroup;
-  bsConfig:Partial<BsDatepickerConfig>;
+  user: User;
+  registerForm: FormGroup | undefined;
+  bsConfig: Partial<BsDatepickerConfig> | undefined;
 
 constructor(
   private authService:AuthService,
@@ -57,7 +62,7 @@ createRegisterForm(){
   }
 
   register() {
-    if (this.registerForm.valid) {
+    if (this.registerForm?.valid) {
       this.user = Object.assign({}, this.registerForm.value);
       this.authService.register(this.user).subscribe(
         ()=>this.alertService.success("Registration Successful"),
@@ -70,7 +75,7 @@ createRegisterForm(){
     }
   }
 
-  cancel(){
-   this.cancelRequest.emit(false);
+  cancel() {
+    this.cancelRequest.emit(false);
   }
 }
