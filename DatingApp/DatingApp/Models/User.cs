@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 
 namespace DatingApp.Models;
-public abstract class User: IdentityUser<int>
+public class User : IdentityUser<int>
 {
     public string Gender { get; set; }
     public DateTime DateOfBirth { get; set; }
@@ -13,17 +13,17 @@ public abstract class User: IdentityUser<int>
     public string Interests { get; set; }
     public string City { get; set; }
     public string Country { get; set; }
-    
-    public ICollection<Photo> Photos { get; set; } 
+
+    public ICollection<Photo> Photos { get; set; }
     public ICollection<Like> Likers { get; set; }
     public ICollection<Like> Likees { get; set; }
-    
-    public ICollection<Message> MessageSent { get; set; } 
-    
+
+    public ICollection<Message> MessageSent { get; set; }
+
     public ICollection<Message> MessagesRecieved { get; set; }
 
     public ICollection<UserRole> UserRoles { get; set; }
 
-    
-    
+
+
 }

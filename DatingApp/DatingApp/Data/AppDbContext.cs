@@ -12,21 +12,33 @@ public class AppDbContext : IdentityDbContext<User, Role, int,
     public AppDbContext(DbContextOptions<AppDbContext> opt) : base(opt)
     {
     }
-    
+
     public DbSet<Photo> Photos { get; set; }
     public DbSet<Like> Likes { get; set; }
     public DbSet<Message> Message { get; set; }
 
-    
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
 
         modelBuilder.Entity<IdentityUserLogin<int>>().HasNoKey();
         modelBuilder.Entity<IdentityUserToken<int>>().HasNoKey();
-        modelBuilder.Entity<UserRole> ()
-            .HasKey(ur => new { ur.UserId, ur.RoleId });
-        
+        modelBuilder.Entity<UserRole>(userRole =>
+    {
+        userRole.HasKey(ur => new { ur.UserId, ur.RoleId });
+
+        userRole.HasOne(ur => ur.Role)
+        .WithMany(r => r.UserRoles)
+        .HasForeignKey(ur => ur.RoleId)
+        .IsRequired();
+
+        userRole.HasOne(ur => ur.User)
+                .WithMany(r => r.UserRoles)
+                .HasForeignKey(ur => ur.UserId)
+                .IsRequired();
+    });
+
         modelBuilder.Entity<Like>()
             .HasKey(k => new { k.LikerId, k.LikeeId });
 
@@ -41,7 +53,7 @@ public class AppDbContext : IdentityDbContext<User, Role, int,
             .WithMany(u => u.Likees)
             .HasForeignKey(u => u.LikeeId)
             .OnDelete(DeleteBehavior.Restrict);
-        
+
 
         modelBuilder.Entity<Message>()
             .HasOne(u => u.Sender)
