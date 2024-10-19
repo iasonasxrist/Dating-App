@@ -21,7 +21,7 @@ RUN dotnet build "DatingApp.csproj" -c Release -o /app/build
 
 # Stage 2: Publish the app
 FROM build AS publish
-WORKDIR "/src/DatingApp"
+WORKDIR "/src/DatingApp/DatingApp.csproj"
 RUN dotnet publish "DatingApp.csproj" -c Release -o /app/publish
 
 # Stage 3: Final image to run the app
