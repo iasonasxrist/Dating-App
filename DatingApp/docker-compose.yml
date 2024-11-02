@@ -1,0 +1,6 @@
+﻿services:
+  datingapp:
+    image: datingapp
+    build:
+      context: .
+      dockerfile: DatingApp/Dockerfile
