@@ -1,6 +1,8 @@
 
+using System.Reflection;
 using System.Text;
 using API.Helper;
+using DatingApp.Data;
 using DatingApp.Helper;
 using DatingApp.Models;
 using DatingApp.Repos;
@@ -27,10 +29,16 @@ namespace DatingApp
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
-            
+            services.AddControllers(options =>
+            {
+                var policy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build();
+                options.Filters.Add(new AuthorizeFilter(policy));
+            });
+
             // Use in-memory database for now
-            if ( !_env.IsDevelopment())
+            if (_env.IsDevelopment())
             {
                 services.AddDbContext<AppDbContext>(opt =>
                 {
@@ -39,28 +47,20 @@ namespace DatingApp
                         sqlServerOptions.EnableRetryOnFailure();
                         sqlServerOptions.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
                     });
-
                 }, ServiceLifetime.Singleton);
-         
+
+            }
+            else
+            {
+                services.AddDbContext<AppDbContext>(options => { options.UseInMemoryDatabase("InMemoryDb"); },
+                    ServiceLifetime.Singleton);
             }
 
- 
-            services.AddDbContext<AppDbContext>(options =>
-            {
-                options.UseInMemoryDatabase("InMemoryDb");
-            }, ServiceLifetime.Singleton);
-            // Configure Swagger
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo
-                {
-                    Title = "API",
-                    Version = "v1",
-                    Description = "My Dating App APIs"
-                });
-            });
 
-            // Identity configuration
+
+
+            #region Identity configuration
+
             IdentityBuilder builder = services.AddIdentityCore<User>(opt =>
             {
                 opt.Password.RequireDigit = false;
@@ -75,8 +75,54 @@ namespace DatingApp
             builder.AddRoleValidator<RoleValidator<Role>>();
             builder.AddRoleManager<RoleManager<Role>>();
             builder.AddSignInManager<SignInManager<User>>();
+
+            #endregion
+
+
+
+
+            #region MVC
+
+            services.AddMvc(options =>
+            {
+                // With this the Authorize attributes in Controllers are not needed
+                var policy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build();
+                options.Filters.Add(new AuthorizeFilter(policy));
+            });
+
+            #endregion
+
+
+            #region CORS
+
+            services.AddCors(options => options.AddPolicy("CorsPolicy", policy =>
+            {
+                policy.AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .WithOrigins("http://localhost:5023")
+                    .AllowCredentials();
+            }));
+
+            #endregion // Add CORS policy
+
+
+            #region Services
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "API",
+                    Version = "v1",
+                    Description = "My Dating App APIs"
+                });
+            });
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options => {
+                .AddJwtBearer(options =>
+                {
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuerSigningKey = true,
@@ -94,37 +140,13 @@ namespace DatingApp
                 opt.AddPolicy("VipOnly", policy => policy.RequireRole("VIP"));
             });
 
-            #region MVC
-            services.AddMvc(options =>
-            {
-                // With this the Authorize attributes in Controllers are not needed
-                var policy = new AuthorizationPolicyBuilder()
-                    .RequireAuthenticatedUser()
-                    .Build();
-                options.Filters.Add(new AuthorizeFilter(policy));
-            });
-
-            #endregion
-            
-            
-            #region CORS
-
-            services.AddCors(options => options.AddPolicy("CorsPolicy", policy =>
-            {
-                policy.AllowAnyHeader()
-                    .AllowAnyMethod()
-                    .WithOrigins("http://localhost:4200")
-                    .AllowCredentials();
-            }));
-
-            #endregion // Add CORS policy
-
-
             services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
 
             services.AddScoped<LogUserActivity>();
             services.AddScoped<IDatingRepository, DatingRepository>();
-          
+            services.AddScoped<IAuthRepository, AuthRepository>();
+
+            #endregion
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
