@@ -4,11 +4,11 @@ services:
   db:
     image: mcr.microsoft.com/azure-sql-edge
     container_name: mssql_container
-    environment:
-      - ACCEPT_EULA=Y
-      - SA_PASSWORD=YourPassword123!
     ports:
       - "1433:1433"
+    environment:
+      - ACCEPT_EULA="Y"
+      - SA_PASSWORD="YourPassword123!"
     networks:
       - datingapp-network
 
@@ -21,9 +21,9 @@ services:
       - db
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DefaultConnection=Server=db,1433;Database=DatingAppDB;User Id=sa;Password=YourPassword123!
+      - ConnectionStrings__DefaultConnection="Server=db,1433;Database=DatingAppDB;User Id=sa;Password=YourPassword123!;"
     ports:
-     - "80:80"
+     - "8080:8080"
     networks:
       - datingapp-network
 
