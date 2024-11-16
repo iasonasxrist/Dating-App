@@ -52,21 +52,22 @@ namespace DatingApp.Controllers
         [HttpGet("{id}", Name = "GetUser")]
         public async Task<IActionResult> GetUser(int id)
         {
-            var user = await _repo.GetUser(id);
-            var usersToReturn = await _mapper.Map<IEnumerable<UserForDetailedDto>>(user);
-            return Ok(usersToReturn);
+            // var user = await _repo.GetUser(id);
+            // var usersToReturn = await _mapper.Map<IEnumerable<UserForDetailedDto>>(user);
+            // return Ok(usersToReturn);
+            return NoContent();
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(int id, UserUpdateDto userUpdateDto)
         {
 
-            if (id != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value)) return Unauthorized();
-
-            User userFromRepo = await _repo.GetUser(id);
-            _mapper.Map(userUpdateDto, userFromRepo);
-
-            if (await _repo.SaveAll()) return NoContent();
+            // if (id != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value)) return Unauthorized();
+            //
+            // User userFromRepo = await _repo.GetUser(id);
+            // _mapper.Map(userUpdateDto, userFromRepo);
+            //
+            // if (await _repo.SaveAll()) return NoContent();
             throw new Exception($"Updating user {id} failed on save");
         }
         [HttpPost("{id}/like/{recipientId}")]
@@ -74,22 +75,22 @@ namespace DatingApp.Controllers
         {
             if (id != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value)) return Unauthorized();
 
-            var like = await _repo.GetLike(id, recipientId);
-
-            if (like != null) return BadRequest("You are already like the user");
-
-            if (await _repo.GetUser(recipientId) == null) return NotFound();
-
-
-            like = new Like()
-            {
-                LikerId = id,
-                LikeeId = recipientId
-            };
-
-            _repo.Add<Like>(like);
-
-            if (await _repo.SaveAll()) return NoContent();
+            // var like = await _repo.GetLike(id, recipientId);
+            //
+            // if (like != null) return BadRequest("You are already like the user");
+            //
+            // if (await _repo.GetUser(recipientId) == null) return NotFound();
+            //
+            //
+            // like = new Like()
+            // {
+            //     LikerId = id,
+            //     LikeeId = recipientId
+            // };
+            //
+            // _repo.Add<Like>(like);
+            //
+            // if (await _repo.SaveAll()) return NoContent();
 
 
             return BadRequest("Failed to like user");
