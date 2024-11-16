@@ -1,0 +1,21 @@
+# This is a generated file. Not intended for manual editing.
+version: "3.8"
+services:
+  backend:
+    build:
+      context: "/Users/iasonaschristoulakis/Documents/Dating/Dating-App/DatingApp/DatingApp"
+      dockerfile: "Dockerfile"
+      target: "base"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app/bin/Debug/net8.0/DatingApp.dll"
+    environment:
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+    image: "datingapp:dev"
+    ports: []
+    volumes:
+    - "/Users/iasonaschristoulakis/.nuget/packages:/home/app/.nuget/packages"
+    - "/Users/iasonaschristoulakis/Documents/Dating/Dating-App/DatingApp/DatingApp:/app:rw"
+    - "/Users/iasonaschristoulakis/Documents/Dating/Dating-App/DatingApp:/src:rw"
+    working_dir: "/app"

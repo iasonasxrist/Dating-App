@@ -7,8 +7,8 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["DatingApp/DatingApp.csproj", "DatingApp/"]
-RUN dotnet restore "DatingApp/DatingApp.csproj"
+COPY ["./DatingApp/DatingApp.csproj", "DatingApp/"]
+RUN dotnet restore "./DatingApp/DatingApp.csproj"
 COPY . .
 WORKDIR "/src/DatingApp"
 RUN dotnet build "DatingApp.csproj" -c $BUILD_CONFIGURATION -o /app/build
